@@ -451,6 +451,11 @@ class MailHog extends Module
           $property = html_entity_decode($property,  ENT_QUOTES, 'UTF-8');
       }
       if (strpos($property, '=?utf-8?Q?') !== false && extension_loaded('mbstring')) {
+        // see https://bugs.php.net/bug.php?id=68821
+        // mb_decode_mimeheader does not decode "_" to spaces - we apply the proposed workaround here
+        $property = preg_replace_callback('/(=\?[^?]+\?Q\?)([^?]+)(\?=)/i', function($matches) {
+          return $matches[1] . str_replace('_', '=20', $matches[2]) . $matches[3];
+        }, $property);
         $property = mb_decode_mimeheader($property);
       }
     }
