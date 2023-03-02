@@ -11,6 +11,7 @@
 namespace Codeception\Module;
 
 use Codeception\Module;
+use Codeception\TestInterface;
 
 class MailHog extends Module
 {
@@ -58,14 +59,14 @@ class MailHog extends Module
    *
    * @var array
    */
-  protected $config = array('url', 'port', 'guzzleRequestOptions', 'deleteEmailsAfterScenario', 'timeout');
+  protected array $config = array('url', 'port', 'guzzleRequestOptions', 'deleteEmailsAfterScenario', 'timeout');
 
   /**
    * Codeception required variables
    *
    * @var array
    */
-  protected $requiredFields = array('url', 'port');
+  protected array $requiredFields = array('url', 'port');
 
   public function _initialize()
   {
@@ -86,7 +87,7 @@ class MailHog extends Module
   /**
    * Method executed after each scenario
    */
-  public function _after(\Codeception\TestCase $test)
+  public function _after(TestInterface $test)
   {
     if(isset($this->config['deleteEmailsAfterScenario']) && $this->config['deleteEmailsAfterScenario'])
     {
