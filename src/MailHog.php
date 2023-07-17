@@ -75,9 +75,9 @@ class MailHog extends Module
     $timeout = 1.0;
     if(isset($this->config['timeout']))
         $timeout = $this->config['timeout'];
-    
+
     $options = ['base_uri' => $url, 'timeout' => $timeout];
-    
+
     $this->mailhog = new \GuzzleHttp\Client(array_merge($options, $this->config['guzzleRequestOptions'] ?? []));
   }
 
@@ -174,6 +174,26 @@ class MailHog extends Module
 
         foreach ($this->fetchedEmails as $email) {
             if (strpos($email->Content->Headers->To[0], $address) !== false) {
+                array_push($inbox, $email);
+            }
+        }
+        $this->setCurrentInbox($inbox);
+    }
+
+    /**
+     * Access Inbox For Reply-To
+     *
+     * Filters emails to only keep those that have Reply-To to to the provided address
+     *
+     * @param string $address Reply-To address' inbox
+     */
+    public function accessInboxForReplyTo($address)
+    {
+        $inbox = array();
+
+        foreach ($this->fetchedEmails as $email) {
+            $replyTo = $email->Content->Headers->{'Reply-To'}[0] ?? '';
+            if (strpos($replyTo, $address) !== false) {
                 array_push($inbox, $email);
             }
         }
