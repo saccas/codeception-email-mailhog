@@ -15,9 +15,7 @@ use Codeception\TestInterface;
 
 class MailHog extends Module
 {
-  use \Codeception\Email\TestsEmails;
-
-  use \Codeception\Email\EmailServiceProvider;
+  use TestsEmails;
 
   /**
    * HTTP Client to interact with MailHog
